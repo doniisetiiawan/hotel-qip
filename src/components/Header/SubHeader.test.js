@@ -1,14 +1,32 @@
 import React from 'react';
-import ShallowRenderer from 'react-test-renderer/shallow';
-import SubHeader from './SubHeader';
+import { shallow } from 'enzyme';
+import SubHeader, { SubHeaderButton, Title } from './SubHeader';
 
 describe('the <SubHeader /> component', () => {
-  const renderer = new ShallowRenderer();
-
   it('should render with a dynamic title', () => {
-    renderer.render(<SubHeader title="Test Application" />);
-    const component = renderer.getRenderOutput();
+    const title = 'Test Application';
+    const component = shallow(<SubHeader title={title} />);
 
-    expect(component).toMatchSnapshot();
+    expect(component.find(Title).text()).toEqual(title);
+  });
+
+  it('should render with buttons and handle the onClick events', () => {
+    const mockGoBack = jest.fn();
+    const mockOpenForm = jest.fn();
+    const component = shallow(
+      <SubHeader goBack={mockGoBack} openForm={mockOpenForm} />,
+    );
+
+    const goBackButton = component.find(SubHeaderButton).at(0);
+    expect(goBackButton.exists()).toBe(true);
+
+    const openFormButton = component.find(SubHeaderButton).at(1);
+    expect(openFormButton.exists()).toBe(true);
+
+    goBackButton.simulate('click');
+    expect(mockGoBack).toHaveBeenCalled();
+
+    openFormButton.simulate('click');
+    expect(mockOpenForm).toHaveBeenCalled();
   });
 });
