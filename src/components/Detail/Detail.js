@@ -34,8 +34,6 @@ const Detail = ({ match, history }) => {
       getReviewsRequest(match.params.id);
     }
   }, [
-    getHotelRequest,
-    getReviewsRequest,
     match.params.id,
     reviews.length,
   ]);
